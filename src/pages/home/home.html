@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar>
+    
+        <button ion-button icon-only ion-start menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+    <ion-buttons end>    
+        <button ion-button icon-only ion-end (click)="onShowOption($event)">
+            <ion-icon name="more"></ion-icon>
+        </button>
+      </ion-buttons>
+    <ion-title>
+      Ionic Blank
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  The world is your oyster.
+  <p>
+    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
+  </p>
+
+  <button ion-button [navPush]="addPlace">add place</button>
+  <!-- <button ion-button [navPush]="userP" [navParams] = "{'userName':'Aditya'}" >users</button> -->
+  <button ion-button>users</button>
+  
+</ion-content>
+
+<ion-footer padding>
+  loading..............
+</ion-footer>

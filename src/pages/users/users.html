@@ -1,0 +1,34 @@
+<!--
+  Generated template for the UsersPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    
+        <button ion-button icon-only menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+    
+    <ion-title>hi {{name}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    Hi {{name}} how are you
+    
+    <button ion-button navPop >Back</button>
+    <!-- <div *ngIf="!show">wait for 4 seconds</div> -->
+
+    <ion-list reorder="true" (ionItemReorder)="reorderItems($event)">
+      <ion-item *ngFor="let item of items">{{ item }}</ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer padding>
+  this is a footer
+</ion-footer>
