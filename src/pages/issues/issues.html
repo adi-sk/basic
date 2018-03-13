@@ -1,0 +1,24 @@
+
+<ion-header>
+  <ion-navbar>
+    
+    <ion-title>
+      Isuues
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card *ngFor="let location of Locations">
+    <img [src]="location.imageUrl">
+    <ion-card-content text-center>
+      <ion-card-title>
+        {{ location.title }}
+      </ion-card-title>
+      <p>{{ location.description }}</p>
+      <p>lat:{{location.location?.lat}}</p>
+      <p>lng:{{location.location?.lng}}</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+

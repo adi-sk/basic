@@ -12,10 +12,12 @@ import { TabsPage } from '../pages/tabs/tabs'
 import { SignupPage } from '../pages/signup/signup';
 import { SigninPage } from '../pages/signin/signin';
 import { SetLocationPage } from '../pages/set-location/set-location';
+import { IssuesPage } from '../pages/issues/issues'
 
 import { PopOver } from '../components/popover'
 
 import { AuthService } from "../services/auth";
+import { PlacesService } from '../services/places'
 import { AddPlacePage } from '../pages/add-place/add-place';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Camera } from '@ionic-native/camera';
@@ -34,7 +36,8 @@ import { AgmCoreModule } from '@agm/core';
     SigninPage,
     PopOver,
     AddPlacePage,
-    SetLocationPage
+    SetLocationPage,
+    IssuesPage
   ],
   imports: [
     BrowserModule,
@@ -56,7 +59,8 @@ import { AgmCoreModule } from '@agm/core';
     SigninPage,
     PopOver,
     AddPlacePage,
-    SetLocationPage
+    SetLocationPage,
+    IssuesPage
   ],
   providers: [
     StatusBar,
@@ -65,7 +69,8 @@ import { AgmCoreModule } from '@agm/core';
     AuthService,
     Geolocation,
     Camera,
-    GoogleMaps
+    GoogleMaps,
+    PlacesService
   ]
 })
 export class AppModule {}

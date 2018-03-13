@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, PopoverController } from 'ionic-angular';
+import { NavController, PopoverController,Platform } from 'ionic-angular';
 import { UsersPage } from '../users/users';
 import { PopOver } from '../../components/popover';
 // import { AuthService } from '../../services/auth';
@@ -16,12 +16,17 @@ export class HomePage {
   userP = UsersPage;
   addPlace = AddPlacePage;
   constructor(public navCtrl: NavController,
-              private popCtrl : PopoverController) {
+              private popCtrl : PopoverController,
+              private platform : Platform) {
 
   }
 
   clicked(event){
     this.navCtrl.push(UsersPage,{"userName":"Aditya"});
+  }
+
+  exit(){
+    this.platform.exitApp();
   }
 
   onShowOption(event : MouseEvent){

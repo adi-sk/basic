@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm } from "@angular/forms";
-import { ModalController, LoadingController, ToastController } from "ionic-angular";
+import { ModalController, LoadingController, ToastController, AlertController } from "ionic-angular";
 
 
 import { SetLocationPage } from "../set-location/set-location";
@@ -10,7 +10,7 @@ import { Camera,CameraOptions } from '@ionic-native/camera'
 //import { Geolocation } from 'ionic-native'
 
 //import { GoogleMaps,GoogleMap,GoogleMapOptions,GoogleMapsEvent } from '@ionic-native/google-maps'
-//import { PlacesService } from "../../services/places";
+import { PlacesService } from "../../services/places";
 
 //declare var cordova: any;
 
@@ -27,24 +27,29 @@ export class AddPlacePage {
   };
   locationIsSet = false;
   imageUrl = '';
+  imgFile : File;
 
   constructor(private modalCtrl: ModalController,
               private loadingCtrl: LoadingController,
               private toastCtrl: ToastController,
               private geoloc : Geolocation,
-              private camera : Camera ) {
+              private camera : Camera,
+              private placesService : PlacesService,
+              private alertCtrl : AlertController ) {
   }
 
   onSubmit(form: NgForm) {
-    // this.placesService
-    //   .addPlace(form.value.title, form.value.description, this.location, this.imageUrl);
-    // form.reset();
-    // this.location = {
-    //   lat: 40.7624324,
-    //   lng: -73.9759827
-    // };
-    // this.imageUrl = '';
-    // this.locationIsSet = false;
+
+
+    this.placesService
+      .addPlace(form.value.title, form.value.description, this.location, this.imageUrl);
+    form.reset();
+    this.location = {
+      lat: 40.7624324,
+      lng: -73.9759827
+    };
+    this.imageUrl = '';
+    this.locationIsSet = false;
   }
   
 
@@ -63,29 +68,6 @@ export class AddPlacePage {
   }
 
   onLocate() {
-    // let mapOptions: GoogleMapOptions = {
-    //   camera: {
-    //     target: {
-    //       lat: 43.0741904,
-    //       lng: -89.3809802
-    //     },
-    //     zoom: 18,
-    //     tilt: 30
-    //   }
-    // };
-    // this.map = GoogleMaps.create('first',mapOptions)
-
-    // this.map.on(GoogleMapsEvent.MAP_READY).subscribe(()=>{
-    //   this.map.getMyLocation().then(location=>{
-    //    const toaster = this.toastCtrl.create({
-    //       message : location.latLng.toString(),
-    //       duration : 2500
-    //     })
-    //     toaster.present();
-    //   })
-    // })
-    
-
     const loader = this.loadingCtrl.create({
       content: 'Getting your Location...'
     });
@@ -110,19 +92,29 @@ export class AddPlacePage {
   }
 
   onTakePhoto() {
-    // const options: CameraOptions = {
-    //   quality: 100,
-    //   destinationType: this.camera.DestinationType.DATA_URL,
-    //   encodingType: this.camera.EncodingType.JPEG,
-    //   mediaType: this.camera.MediaType.PICTURE
-    // }
-    // this.camera.getPicture(options).then((imageData) => {
-    //   // imageData is either a base64 encoded string or a file URI
-    //   // If it's base64:
-    //   let base64Image = 'data:image/jpeg;base64,' + imageData;
-    //  }, (err) => {
-    //   // Handle error
-    //  });
+    const options: CameraOptions = {
+      //quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      //mediaType: this.camera.MediaType.PICTURE
+      correctOrientation : true
+    }
+    this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // If it's base64:
+      let base64Image = 'data:image/jpeg;base64,' + imageData;
+      
+      this.imageUrl = base64Image;
+      
+     }, (err) => {
+      // Handle error
+      const alert = this.alertCtrl.create({
+        title: 'something went wrong!',
+        message: 'Try clicking picture again',
+        buttons: ['Ok']
+      });
+      alert.present();
+     });
     
 
     // Camera.getPicture({
