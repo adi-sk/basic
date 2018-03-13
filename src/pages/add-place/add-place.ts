@@ -7,6 +7,9 @@ import { SetLocationPage } from "../set-location/set-location";
 import { Location } from "../../models/location";
 import { Geolocation } from '@ionic-native/geolocation'
 import { Camera,CameraOptions } from '@ionic-native/camera'
+//import { Geolocation } from 'ionic-native'
+
+//import { GoogleMaps,GoogleMap,GoogleMapOptions,GoogleMapsEvent } from '@ionic-native/google-maps'
 //import { PlacesService } from "../../services/places";
 
 //declare var cordova: any;
@@ -16,6 +19,8 @@ import { Camera,CameraOptions } from '@ionic-native/camera'
   templateUrl: 'add-place.html'
 })
 export class AddPlacePage {
+
+  //map : GoogleMap;
   location: Location = {
     lat: 19.097230, 
     lng:  72.913031
@@ -26,7 +31,7 @@ export class AddPlacePage {
   constructor(private modalCtrl: ModalController,
               private loadingCtrl: LoadingController,
               private toastCtrl: ToastController,
-              private geoloc:Geolocation,
+              private geoloc : Geolocation,
               private camera : Camera ) {
   }
 
@@ -41,6 +46,7 @@ export class AddPlacePage {
     // this.imageUrl = '';
     // this.locationIsSet = false;
   }
+  
 
   onOpenMap() {
     const modal = this.modalCtrl.create(SetLocationPage,
@@ -57,45 +63,66 @@ export class AddPlacePage {
   }
 
   onLocate() {
+    // let mapOptions: GoogleMapOptions = {
+    //   camera: {
+    //     target: {
+    //       lat: 43.0741904,
+    //       lng: -89.3809802
+    //     },
+    //     zoom: 18,
+    //     tilt: 30
+    //   }
+    // };
+    // this.map = GoogleMaps.create('first',mapOptions)
+
+    // this.map.on(GoogleMapsEvent.MAP_READY).subscribe(()=>{
+    //   this.map.getMyLocation().then(location=>{
+    //    const toaster = this.toastCtrl.create({
+    //       message : location.latLng.toString(),
+    //       duration : 2500
+    //     })
+    //     toaster.present();
+    //   })
+    // })
+    
+
     const loader = this.loadingCtrl.create({
       content: 'Getting your Location...'
     });
     loader.present();
-    this.geoloc.getCurrentPosition()
-      .then(
+    let options = {
+      //timeout: 30000,
+      enableHighAccuracy: true
+      }
+  
+    this.geoloc.watchPosition(options)
+      .subscribe(
         location => {
           loader.dismiss();
           this.location.lat = location.coords.latitude;
           this.location.lng = location.coords.longitude;
           this.locationIsSet = true;
+        },error=>{
+          loader.dismiss();
         }
       )
-      .catch(
-        error => {
-          loader.dismiss();
-          const toast = this.toastCtrl.create({
-            message: 'Could not get location, please pick it manually!',
-            duration: 2500
-          });
-          toast.present();
-        }
-      );
+      
   }
 
   onTakePhoto() {
-    const options: CameraOptions = {
-      quality: 100,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
-    }
-    this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64:
-      let base64Image = 'data:image/jpeg;base64,' + imageData;
-     }, (err) => {
-      // Handle error
-     });
+    // const options: CameraOptions = {
+    //   quality: 100,
+    //   destinationType: this.camera.DestinationType.DATA_URL,
+    //   encodingType: this.camera.EncodingType.JPEG,
+    //   mediaType: this.camera.MediaType.PICTURE
+    // }
+    // this.camera.getPicture(options).then((imageData) => {
+    //   // imageData is either a base64 encoded string or a file URI
+    //   // If it's base64:
+    //   let base64Image = 'data:image/jpeg;base64,' + imageData;
+    //  }, (err) => {
+    //   // Handle error
+    //  });
     
 
     // Camera.getPicture({

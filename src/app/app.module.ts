@@ -19,6 +19,7 @@ import { AuthService } from "../services/auth";
 import { AddPlacePage } from '../pages/add-place/add-place';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Camera } from '@ionic-native/camera';
+import {GoogleMaps} from '@ionic-native/google-maps'
 
 
 import { AgmCoreModule } from '@agm/core';
@@ -63,7 +64,8 @@ import { AgmCoreModule } from '@agm/core';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService,
     Geolocation,
-    Camera
+    Camera,
+    GoogleMaps
   ]
 })
 export class AppModule {}
