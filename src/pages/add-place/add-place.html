@@ -2,7 +2,18 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Add a Place</ion-title>
+    <ion-title>Add a Place
+      <ion-chip float-right color="secondary" *ngIf="isOnline">
+        <ion-label color="dark">Online</ion-label>
+      </ion-chip>
+      
+      <ion-chip float-right color="danger" *ngIf="!isOnline">
+        <ion-label>Offline</ion-label>
+      </ion-chip>
+
+    </ion-title>
+    
+    
   </ion-navbar>
 
 </ion-header>
@@ -42,7 +53,7 @@
             Locate me
           </button>
         </ion-col>
-        <ion-col>
+        <ion-col *ngIf = "isOnline">
           <button
             ion-button
             block
@@ -55,7 +66,13 @@
           </button>
         </ion-col>
       </ion-row>
-      <ion-row *ngIf="locationIsSet">
+      <ion-row *ngIf = "locationIsSet && !isOnline">
+        <ion-col text-center>
+          <p>lat:{{ location.lat }}</p>
+          <p>lng:{{ location.lng }}</p>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="locationIsSet && isOnline">
         <ion-col>
           <agm-map
             [latitude]="location.lat"
@@ -67,12 +84,12 @@
           </agm-map>
         </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="isOnline">
         <ion-col text-center>
           <h5>Take a Photo!</h5>
         </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="isOnline">
         <ion-col>
           <button
             ion-button
@@ -98,7 +115,7 @@
             color="secondary"
             block
             type="submit"
-            [disabled]="!f.valid || !locationIsSet || imageUrl == ''">
+            [disabled]="!f.valid || !locationIsSet">
             Add this Place
           </button>
         </ion-col>

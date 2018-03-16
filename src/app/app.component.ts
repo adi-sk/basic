@@ -8,6 +8,7 @@ import { TabsPage } from '../pages/tabs/tabs'
 import { SignupPage } from '../pages/signup/signup';
 import { SigninPage } from '../pages/signin/signin';
 import { AuthService } from '../services/auth';
+import { Storage } from '@ionic/storage'
 // import { HomePage } from '../pages/home/home';
 // import { UsersPage } from '../pages/users/users'
 @Component({
@@ -25,7 +26,8 @@ export class MyApp {
               statusBar: StatusBar, 
               splashScreen: SplashScreen,
               private menuCtrl : MenuController,
-              private auth : AuthService) {
+              private auth : AuthService,
+              private storage : Storage) {
 
     firebase.initializeApp({
       apiKey: "AIzaSyDInQMDcyc1oA_2z3PmqBItGD2Ug-IyYzU",
@@ -46,6 +48,7 @@ export class MyApp {
       if(user){
         this.isAuthenticated = true;
         this.rootPage = TabsPage
+        this.storage.set('uid',user.uid);
       }
       else{
         this.isAuthenticated =false;

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { ModalController, LoadingController, ToastController, AlertController } from "ionic-angular";
+import { Subscription } from 'rxjs/Subscription';
 
 
 import { SetLocationPage } from "../set-location/set-location";
@@ -11,6 +12,8 @@ import { Camera,CameraOptions } from '@ionic-native/camera'
 
 //import { GoogleMaps,GoogleMap,GoogleMapOptions,GoogleMapsEvent } from '@ionic-native/google-maps'
 import { PlacesService } from "../../services/places";
+import { Storage } from '@ionic/storage'
+import { Network } from '@ionic-native/network'
 
 //declare var cordova: any;
 
@@ -20,6 +23,9 @@ import { PlacesService } from "../../services/places";
 })
 export class AddPlacePage {
 
+  connected: Subscription;
+  disconnected: Subscription;
+  isOnline : Boolean = true;
   //map : GoogleMap;
   location: Location = {
     lat: 19.097230, 
@@ -35,14 +41,21 @@ export class AddPlacePage {
               private geoloc : Geolocation,
               private camera : Camera,
               private placesService : PlacesService,
-              private alertCtrl : AlertController ) {
+              private alertCtrl : AlertController,
+              private storage : Storage,
+              private network : Network) {
+
+                if (network.type == 'unknown' || network.type == 'none' || network.type == 'cellular' ){
+                    this.isOnline = false;
+                    
+                }
   }
 
   onSubmit(form: NgForm) {
 
 
     this.placesService
-      .addPlace(form.value.title, form.value.description, this.location, this.imageUrl);
+      .addPlace(form.value.title, form.value.description, this.location, this.imageUrl,this.isOnline);
     form.reset();
     this.location = {
       lat: 40.7624324,
@@ -157,5 +170,39 @@ export class AddPlacePage {
     //       toast.present();
     //     }
     //   );
+  }
+  displayNetworkUpdate(connectionState: string){
+    let networkType = this.network.type;
+
+    this.toastCtrl.create({
+      message: `You are now ${connectionState} via ${networkType}`,
+      duration: 10000
+    }).present();
+  }
+
+  ionViewDidEnter() {
+    if(!this.isOnline){
+      this.toastCtrl.create({
+        message: 'You are Offline',
+        duration: 10000
+      }).present();
+    }
+
+    this.connected = this.network.onConnect().subscribe(data => {
+      if(data.type == 'online'){
+        this.isOnline = true;
+      }
+      //console.log(data)
+      this.displayNetworkUpdate(data.type);
+    }, error => console.error(error));
+   
+    this.disconnected = this.network.onDisconnect().subscribe(data => {
+      //console.log(data)
+      if(data.type == 'offline'){
+        this.isOnline = false;  
+      }
+      
+      this.displayNetworkUpdate(data.type);
+    }, error => console.error(error));
   }
 }
