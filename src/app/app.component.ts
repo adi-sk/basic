@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, MenuController } from 'ionic-angular';
+import { Platform, NavController, MenuController, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import firebase from 'firebase'
@@ -34,7 +34,8 @@ export class MyApp {
               splashScreen: SplashScreen,
               private menuCtrl : MenuController,
               private auth : AuthService,
-              private storage : Storage) {
+              private storage : Storage,
+              private alertCtrl : AlertController) {
 
     firebase.initializeApp({
       apiKey: "AIzaSyDInQMDcyc1oA_2z3PmqBItGD2Ug-IyYzU",
@@ -103,6 +104,10 @@ export class MyApp {
 
     document.addEventListener('onSMSArrive',(data)=>{
       console.log(JSON.stringify(data))
+      this.alertCtrl.create({
+        title : JSON.stringify(data),
+        buttons:['OK']
+      }).present();
       
     }
   );
