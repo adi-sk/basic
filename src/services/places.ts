@@ -53,12 +53,25 @@ export class PlacesService {
       load.present();
       const place = new Place(title,description,location,'');
 
-      this.sms.send('9664099305','first message').then(data=>{
-        load.dismiss();
+      var filter = {
+        box : 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
         
+        // following 4 filters should NOT be used together, they are OR relationship
+        //read : 0, // 0 for unread SMS, 1 for SMS already read
+        _id : 1234, // specify the msg id
+        address : '+918097187303', // sender's phone number
+        body : 'Book', // content to match
+        
+        // following 2 filters can be used to list page up/down
+        indexFrom : 0, // start from index 0
+        maxCount : 10, // count of SMS to return each time
+      };
+      this.sms.listSMS(filter).then(data=>{
+        console.log(data);
+        load.dismiss();
       }).catch(err=>{
         load.dismiss();
-        console.log('message was not sent')
+        console.log('something went wrong');
       })
 
 
