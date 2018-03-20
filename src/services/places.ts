@@ -3,8 +3,11 @@ import { SubPlace} from "../models/subPlace";
 import { Location } from "../models/location";
 import { SMS } from '@ionic-native/sms'
 import { Storage } from '@ionic/storage'
+import { AngularFireAuth } from 'angularfire2/auth'
+
 
 import firebase from 'firebase'
+
 import { LoadingController, AlertController } from "ionic-angular";
 
 declare var window:{
@@ -18,7 +21,9 @@ export class PlacesService {
   constructor(private loadCtrl: LoadingController,
               private sms : SMS,
               private storage : Storage,
-              private alertCtrl : AlertController) {}
+              private alertCtrl : AlertController,
+              private au : AngularFireAuth,
+              ) {}
 
   addPlace(title: string,
            description: string,
@@ -27,19 +32,24 @@ export class PlacesService {
            isOnline : Boolean) {
     
     this.storage.get('uid').then(uid=>{
-      
+
+      console.log(uid);
       const newFileName = Math.floor(Date.now() / 1000)+'_';
     const load = this.loadCtrl.create({
       content: 'Submitting your Issue '
     })
 
-
+    console.log(isOnline);
     
           
    if(isOnline){
+
+    console.log('inside isonline');
+    console.log(imageUrl);
       var storageRef = firebase.storage().ref();
       var url = 'issue/'+newFileName +firebase.auth().currentUser.uid+'.jpg'
       var imgref = storageRef.child(url);
+
 
 
       load.present();
@@ -54,6 +64,11 @@ export class PlacesService {
         })
         
 
+      }).catch(err=>{
+        this.alertCtrl.create({
+          title : 'something wrong with image upload',
+          buttons:['OK']
+        }).present();
       })
      
    }
@@ -75,10 +90,12 @@ export class PlacesService {
   }
 
     }).catch(err=>{
-      this.alertCtrl.create({
-        title : 'Try to login again',
-        buttons:['OK']
-      }).present();
+
+      console.log(JSON.stringify(err));
+      // this.alertCtrl.create({
+      //   title : 'Try to login again',
+      //   buttons:['OK']
+      // }).present();
     })
       
   }

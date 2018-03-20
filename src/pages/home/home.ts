@@ -35,8 +35,8 @@ export class HomePage {
       name : 'Aditya Kurhade'
     }
 
-    this.storage.get('uid').then(value=>{
-      console.log('this is uid = '+ value)
+    this.storage.keys().then(value=>{
+      console.log(value)
     })
     const encrypted = CryptoJS.AES.encrypt(JSON.stringify(place), key);
 

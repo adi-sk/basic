@@ -15,6 +15,9 @@ import { PlacesService } from "../../services/places";
 import { Storage } from '@ionic/storage'
 import { Network } from '@ionic-native/network'
 
+
+import firebase from 'firebase'
+
 //declare var cordova: any;
 
 @Component({
@@ -46,9 +49,10 @@ export class AddPlacePage {
               private network : Network) {
 
                 if (network.type == 'unknown' || network.type == 'none' || network.type == 'cellular' ){
-                    this.isOnline = false;
-                    
+                    this.isOnline = false;   
                 }
+
+                firebase.database().ref('demo').push({dummy:'dummy'}).then;
   }
 
   onSubmit(form: NgForm) {
@@ -86,7 +90,7 @@ export class AddPlacePage {
     });
     loader.present();
     let options = {
-      //timeout: 30000,
+      timeout: 30000,
       enableHighAccuracy: true
       }
   

@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController, MenuController, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { AngularFireAuth } from 'angularfire2/auth'
 import firebase from 'firebase'
 
 import { TabsPage } from '../pages/tabs/tabs'
@@ -12,8 +13,12 @@ import { Storage } from '@ionic/storage'
 // import { HomePage } from '../pages/home/home';
 // import { UsersPage } from '../pages/users/users'
 declare var window:{
-  PlSMS:any
+  PlSMS:any,
+  CordovaCall:any
 }
+
+
+
 
 
 @Component({
@@ -35,16 +40,10 @@ export class MyApp {
               private menuCtrl : MenuController,
               private auth : AuthService,
               private storage : Storage,
-              private alertCtrl : AlertController) {
+              private alertCtrl : AlertController,
+              private au : AngularFireAuth) {
 
-    firebase.initializeApp({
-      apiKey: "AIzaSyDInQMDcyc1oA_2z3PmqBItGD2Ug-IyYzU",
-      authDomain: "ionic-practice-d37d2.firebaseapp.com",
-      databaseURL: "https://ionic-practice-d37d2.firebaseio.com",
-      projectId: "ionic-practice-d37d2",
-      storageBucket: "ionic-practice-d37d2.appspot.com",
-      messagingSenderId: "110294128106"
-    })
+    
 
     // let ref = firebase.database().ref();
     //       ref.push({'name':'kurhade'},
@@ -52,11 +51,13 @@ export class MyApp {
     //             console.log(e)
     //           })
 
+    
+
     firebase.auth().onAuthStateChanged(user=>{
       if(user){
         this.isAuthenticated = true;
         this.rootPage = TabsPage
-        this.storage.set('uid',user.uid);
+        //this.storage.set('uid',user.uid);
       }
       else{
         this.isAuthenticated =false;
@@ -69,48 +70,56 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-
+      
       
 
-      var filter = {
-        box : 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
+  //     var filter = {
+  //       box : 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
         
-        // following 4 filters should NOT be used together, they are OR relationship
-        //read : 0, // 0 for unread SMS, 1 for SMS already read
-        //_id : 1234, // specify the msg id
-        address : '+918097187303', // sender's phone number
-        body : 'Book', // content to match
+  //       // following 4 filters should NOT be used together, they are OR relationship
+  //       //read : 0, // 0 for unread SMS, 1 for SMS already read
+  //       //_id : 1234, // specify the msg id
+  //       address : '+918097187303', // sender's phone number
+  //       body : 'Book', // content to match
         
-        // following 2 filters can be used to list page up/down
-        indexFrom : 0, // start from index 0
-        maxCount : 10, // count of SMS to return each time
-      };
-     window.PlSMS.listSMS(filter, (data) => {
-         console.log(JSON.stringify(data));
-       },
-       (err) => {
-         console.log('something went wrong');
-         console.log(err);
-       }
-     )
+  //       // following 2 filters can be used to list page up/down
+  //       indexFrom : 0, // start from index 0
+  //       maxCount : 10, // count of SMS to return each time
+  //     };
+  //    window.PlSMS.listSMS(filter, (data) => {
+  //        console.log(JSON.stringify(data));
+  //      },
+  //      (err) => {
+  //        console.log('something went wrong');
+  //        console.log(err);
+  //      }
+  //    )
 
-     window.PlSMS.startWatch((data)=>{
-       console.log('started watching sms');
-     },
-     (err)=>{
-       console.log('failed watching');
-     }
-    )
+  //    window.PlSMS.startWatch((data)=>{
+  //      console.log('started watching sms');
+  //    },
+  //    (err)=>{
+  //      console.log('failed watching');
+  //    }
+  //   )
 
-    document.addEventListener('onSMSArrive',(data)=>{
-      console.log(JSON.stringify(data))
-      this.alertCtrl.create({
-        title : JSON.stringify(data),
-        buttons:['OK']
-      }).present();
+  //   document.addEventListener('onSMSArrive',(data)=>{
+  //     console.log(JSON.stringify(data))
+  //     this.alertCtrl.create({
+  //       title : JSON.stringify(data),
+  //       buttons:['OK']
+  //     }).present();
       
-    }
-  );
+  //   }
+  // );
+  
+  // window.CordovaCall.on('receiveCall', (data)=>{
+
+  //   window.CordovaCall.endCall((data)=>{
+  //     console.log('call ended successfully');
+      
+  //   });
+  //});
 
 
 
