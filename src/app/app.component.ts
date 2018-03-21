@@ -14,7 +14,8 @@ import { Storage } from '@ionic/storage'
 // import { UsersPage } from '../pages/users/users'
 declare var window:{
   PlSMS:any,
-  CordovaCall:any
+  CordovaCall:any,
+  CallBlock: any
 }
 
 
@@ -120,6 +121,8 @@ export class MyApp {
       
   //   });
   //});
+
+  window.CallBlock.startWatch();
 
 
 
