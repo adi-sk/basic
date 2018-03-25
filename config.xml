@@ -96,6 +96,7 @@
     </plugin>
     <plugin name="cordova-sqlite-storage" spec="^2.2.1" />
     <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
-    <plugin name="cordova-plugin-sms" spec="^1.0.5" />
+    <plugin name="cordova-sms-plugin" spec="^0.1.11" />
+    <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
     <engine name="android" spec="~7.0.0" />
 </widget>

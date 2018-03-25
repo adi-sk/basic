@@ -75,27 +75,30 @@ export class PlacesService {
 
    else if(!isOnline){
       load.present();
+      
       const place = new SubPlace(uid,title,description,location,'');
-      window.PlSMS.sendSMS(description,JSON.stringify(place),(data)=>{
+
+      this.sms.send(description,JSON.stringify(place)).then(data=>{
         load.dismiss();
-      },
-      (err)=>{
+      }).catch(err=>{
         this.alertCtrl.create({
           title : 'Was not able to send Issue offline, check your SMS setings',
           buttons:['OK']
         }).present();
-      }
-    )
+      })
+    
+    
+    
 
   }
 
     }).catch(err=>{
 
       console.log(JSON.stringify(err));
-      // this.alertCtrl.create({
-      //   title : 'Try to login again',
-      //   buttons:['OK']
-      // }).present();
+      this.alertCtrl.create({
+        title : 'Try to login again',
+        buttons:['OK']
+      }).present();
     })
       
   }
